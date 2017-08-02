@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+    <description>这是总的配置文件</description>
+    <task:annotation-driven />
+    <!--基础扫描包-->
+    <context:component-scan base-package="cn.lonecloud">
+        <context:exclude-filter type="regex" expression="cn.lonecloud.controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
+    <!--配置文件-->
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:*.properties"/>
+    <bean id="filePathUtils" class="cn.lonecloud.utils.FilePathUtils">
+        <property name="path" value="${file.filePath}"/>
+    </bean>
+    <!--配置数据源-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <property name="user" value="${jdbc.user}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+    <!--引入对应的配置文件-->
+    <import resource="classpath:applicationContext-*.xml"/>
+</beans>
